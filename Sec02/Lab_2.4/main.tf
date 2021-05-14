@@ -5,6 +5,6 @@ provider "azurerm" {
 }
 
 resource azurerm_resource_group rg {
-    name = "test-rg"
-    location = "westeurope"
+    name = "terraform-on-az-lab0024-rg"
+    location = "canadacentral"
 }

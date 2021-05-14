@@ -1,5 +1,5 @@
 # single line comment example.
-//single line comment example.
+// single line comment example.
 
 /* multiple line comment are represented 
 in this form.
