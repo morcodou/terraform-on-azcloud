@@ -51,18 +51,18 @@ resource "azurerm_network_security_rule" "allow-http" {
   source_port_range           = "*"
   destination_port_range      = "80"
   source_address_prefix       = "*"
-  destination_address_prefix  = azurerm_network_interface.webnic.private_ip_address / 32
+  destination_address_prefix  = "${azurerm_network_interface.webnic.private_ip_address}/32"
   resource_group_name         = azurerm_resource_group.backendrg.name
   network_security_group_name = azurerm_network_security_group.webnsg.name
 }
 
-resource "azurerm_subnet_network_security_group_association" "webtonsg" {
-  subnet_id                 = azurerm_subnet.websubnet.id
+resource "azurerm_network_interface_security_group_association" "be-rg" {
+  network_interface_id      = azurerm_network_interface.webnic.id
   network_security_group_id = azurerm_network_security_group.webnsg.id
 }
 
 resource "azurerm_windows_virtual_machine" "webwinvm" {
-  name                = "gmc-web-win-vm"
+  name                = "gmc-web-vm"
   resource_group_name = azurerm_resource_group.backendrg.name
   location            = azurerm_resource_group.backendrg.location
   size                = "Standard_B2s"
@@ -88,9 +88,9 @@ resource "azurerm_windows_virtual_machine" "webwinvm" {
 resource "azurerm_virtual_machine_extension" "webserverextension" {
   name                 = "iis-web-extension"
   virtual_machine_id   = azurerm_windows_virtual_machine.webwinvm.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.10"
 
   settings = <<SETTINGS
     {

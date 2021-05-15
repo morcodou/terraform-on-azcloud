@@ -35,18 +35,18 @@ resource "azurerm_network_security_rule" "allowrdp" {
   source_port_range           = "*"
   destination_port_range      = "3389"
   source_address_prefix       = "*"
-  destination_address_prefix  = azurerm_network_interface.jumpboxnic.private_ip_address / 32
+  destination_address_prefix  = "${azurerm_network_interface.jumpboxnic.private_ip_address}/32"
   resource_group_name         = azurerm_resource_group.jumpboxrg.name
   network_security_group_name = azurerm_network_security_group.jumpboxnsg.name
 }
 
-resource "azurerm_subnet_network_security_group_association" "web-jumpboxnsg" {
-  subnet_id                 = azurerm_subnet.websubnet.id
+resource "azurerm_network_interface_security_group_association" "webtojumpboxnsg" {
+  network_interface_id      = azurerm_network_interface.jumpboxnic.id
   network_security_group_id = azurerm_network_security_group.jumpboxnsg.id
 }
 
 resource "azurerm_windows_virtual_machine" "jumpboxvm" {
-  name                = "gmc-jumpbox-win-vm"
+  name                = "gmc-jumpbox-vm"
   resource_group_name = azurerm_resource_group.jumpboxrg.name
   location            = azurerm_resource_group.jumpboxrg.location
   size                = "Standard_B2s"
