@@ -42,8 +42,8 @@ resource "azurerm_network_security_group" "webnsg" {
   resource_group_name = azurerm_resource_group.backendrg.name
 }
 
-resource "azurerm_network_security_rule" "allow-tcp-80" {
-  name                        = "allow-tcp-80-rule"
+resource "azurerm_network_security_rule" "allow-http" {
+  name                        = "allow-http-rule"
   priority                    = 100
   direction                   = "Inbound"
   access                      = "Allow"
@@ -51,7 +51,7 @@ resource "azurerm_network_security_rule" "allow-tcp-80" {
   source_port_range           = "*"
   destination_port_range      = "80"
   source_address_prefix       = "*"
-  destination_address_prefix  = azurerm_network_interface.webnic.private_ip_address
+  destination_address_prefix  = azurerm_network_interface.webnic.private_ip_address / 32
   resource_group_name         = azurerm_resource_group.backendrg.name
   network_security_group_name = azurerm_network_security_group.webnsg.name
 }
