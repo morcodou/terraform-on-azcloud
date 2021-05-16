@@ -18,7 +18,7 @@ module "web-vnet" {
   subnet_prefixes     = ["10.0.2.0/24"]
   subnet_names        = [var.websubnet-name]
   tags                = {}
-  depends_on = [azurerm_resource_group.backendrg]
+  depends_on          = [azurerm_resource_group.backendrg]
 }
 
 # module.web-vnet.vnet_address_space=The address space of the newly created vNet

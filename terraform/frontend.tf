@@ -18,7 +18,7 @@ module "frontend-vnet" {
   subnet_prefixes     = ["10.0.0.0/24", "10.0.1.0/24"]
   subnet_names        = ["AzureFirewallSubnet", "jumpbox-subnet"]
   tags                = {}
-  depends_on = [azurerm_resource_group.frontendrg]
+  depends_on          = [azurerm_resource_group.frontendrg]
 }
 
 # module.frontend-vnet.vnet_address_space=The address space of the newly created vNet
