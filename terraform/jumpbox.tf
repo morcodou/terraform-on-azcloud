@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "jumpboxrg" {
 module "jumbox-compute" {
   source         = "../modules/compute"
   location       = azurerm_resource_group.jumpboxrg.location
-  subnet-id      = azurerm_subnet.jumpboxsubnet.id
+  subnet-id      = module.frontend-vnet.vnet_subnets[1]
   vm-name        = "gmc-jumpbox"
   rg-name        = azurerm_resource_group.jumpboxrg.name
   admin-password = var.admin-password

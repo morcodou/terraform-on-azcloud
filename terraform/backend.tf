@@ -10,24 +10,27 @@ resource "azurerm_resource_group" "backendrg" {
   location = var.location-name
 }
 
-resource "azurerm_virtual_network" "webvnet" {
-  name                = var.webvnet-name
-  location            = azurerm_resource_group.backendrg.location
+module "web-vnet" {
+  source              = "Azure/vnet/azurerm"
+  vnet_name           = "web-vnet"
   resource_group_name = azurerm_resource_group.backendrg.name
   address_space       = ["10.0.2.0/23"]
+  subnet_prefixes     = ["10.0.2.0/24"]
+  subnet_names        = [var.websubnet-name]
+  tags                = {}
+  depends_on = [azurerm_resource_group.backendrg]
 }
 
-resource "azurerm_subnet" "websubnet" {
-  name                 = var.websubnet-name
-  resource_group_name  = azurerm_resource_group.backendrg.name
-  virtual_network_name = azurerm_virtual_network.webvnet.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
+# module.web-vnet.vnet_address_space=The address space of the newly created vNet
+# module.web-vnet.vnet_id= The id of the newly created vNet
+# module.web-vnet.vnet_location=The location of the newly created vNet
+# module.web-vnet.vnet_name= The Name of the newly created vNet
+# module.web-vnet.vnet_subnets = The ids of subnets created inside the newl vNet
 
 module "web-compute" {
   source         = "../modules/compute"
   location       = azurerm_resource_group.backendrg.location
-  subnet-id      = azurerm_subnet.websubnet.id
+  subnet-id      = module.web-vnet.vnet_subnets[0]
   vm-name        = "gmc-web"
   rg-name        = azurerm_resource_group.backendrg.name
   admin-password = var.admin-password

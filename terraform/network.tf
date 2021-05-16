@@ -1,8 +1,8 @@
 resource "azurerm_virtual_network_peering" "frenttoback" {
   name                      = "frontend-to-backend"
   resource_group_name       = azurerm_resource_group.frontendrg.name
-  virtual_network_name      = azurerm_virtual_network.frontendvnet.name
-  remote_virtual_network_id = azurerm_virtual_network.webvnet.id
+  virtual_network_name      = module.frontend-vnet.vnet_name
+  remote_virtual_network_id = module.web-vnet.vnet_id
 }
 
 # module outputs
@@ -15,8 +15,8 @@ resource "azurerm_virtual_network_peering" "frenttoback" {
 resource "azurerm_virtual_network_peering" "backtofrent" {
   name                      = "backend-to-frontend"
   resource_group_name       = azurerm_resource_group.backendrg.name
-  virtual_network_name      = azurerm_virtual_network.webvnet.name
-  remote_virtual_network_id = azurerm_virtual_network.frontendvnet.id
+  virtual_network_name      = module.web-vnet.vnet_name
+  remote_virtual_network_id = module.frontend-vnet.vnet_id
 }
 
 resource "azurerm_firewall_nat_rule_collection" "firewallnatrules" {

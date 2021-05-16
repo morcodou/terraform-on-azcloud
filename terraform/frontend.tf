@@ -5,33 +5,27 @@
 # gmc-firewall-pip
 # gmc-firewall
 
-
-
 resource "azurerm_resource_group" "frontendrg" {
   name     = "gmc-frontend-rg"
   location = "canadacentral"
 }
 
-resource "azurerm_virtual_network" "frontendvnet" {
-  name                = "gmc-frontend-vnet"
-  location            = azurerm_resource_group.frontendrg.location
+module "frontend-vnet" {
+  source              = "Azure/vnet/azurerm"
+  vnet_name           = "frontend-vnet"
   resource_group_name = azurerm_resource_group.frontendrg.name
   address_space       = ["10.0.0.0/23"]
+  subnet_prefixes     = ["10.0.0.0/24", "10.0.1.0/24"]
+  subnet_names        = ["AzureFirewallSubnet", "jumpbox-subnet"]
+  tags                = {}
+  depends_on = [azurerm_resource_group.frontendrg]
 }
 
-resource "azurerm_subnet" "azfirewallsubnet" {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = azurerm_resource_group.frontendrg.name
-  virtual_network_name = azurerm_virtual_network.frontendvnet.name
-  address_prefixes     = ["10.0.0.0/24"]
-}
-
-resource "azurerm_subnet" "jumpboxsubnet" {
-  name                 = "gmc-jumpbox-subnet"
-  resource_group_name  = azurerm_resource_group.frontendrg.name
-  virtual_network_name = azurerm_virtual_network.frontendvnet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
+# module.frontend-vnet.vnet_address_space=The address space of the newly created vNet
+# module.frontend-vnet.vnet_id= The id of the newly created vNet
+# module.frontend-vnet.vnet_location=The location of the newly created vNet
+# module.frontend-vnet.vnet_name= The Name of the newly created vNet
+# module.frontend-vnet.vnet_subnets = The ids of subnets created inside the newl vNet
 
 resource "azurerm_public_ip" "firewallpip" {
   name                = "gmc-firewall-pip"
@@ -48,7 +42,7 @@ resource "azurerm_firewall" "firewall" {
 
   ip_configuration {
     name                 = "firewall-ip-config"
-    subnet_id            = azurerm_subnet.azfirewallsubnet.id
+    subnet_id            = module.frontend-vnet.vnet_subnets[0]
     public_ip_address_id = azurerm_public_ip.firewallpip.id
   }
 }
