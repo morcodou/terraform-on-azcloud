@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "frontendrg" {
 
 module "frontend-vnet" {
   source              = "Azure/vnet/azurerm"
-  vnet_name           = "frontend-vnet"
+  vnet_name           = "${var.env}frontend-vnet"
   resource_group_name = azurerm_resource_group.frontendrg.name
   address_space       = ["10.0.0.0/23"]
   subnet_prefixes     = ["10.0.0.0/24", "10.0.1.0/24"]
@@ -28,7 +28,7 @@ module "frontend-vnet" {
 # module.frontend-vnet.vnet_subnets = The ids of subnets created inside the newl vNet
 
 resource "azurerm_public_ip" "firewallpip" {
-  name                = "gmc-firewall-pip"
+  name                = "${var.env}gmc-firewall-pip"
   resource_group_name = azurerm_resource_group.frontendrg.name
   location            = azurerm_resource_group.frontendrg.location
   allocation_method   = "Static"
@@ -36,7 +36,7 @@ resource "azurerm_public_ip" "firewallpip" {
 }
 
 resource "azurerm_firewall" "firewall" {
-  name                = "gmc-firewall"
+  name                = "${var.env}gmc-firewall"
   location            = azurerm_resource_group.frontendrg.location
   resource_group_name = azurerm_resource_group.frontendrg.name
 
