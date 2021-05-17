@@ -6,7 +6,7 @@
 # gmc-firewall
 
 resource "azurerm_resource_group" "frontendrg" {
-  name     = "gmc-frontend-rg"
+  name     = "${var.env}gmc-frontend-rg"
   location = "canadacentral"
 }
 

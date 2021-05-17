@@ -1,3 +1,7 @@
+variable "env" {
+  default = "dev"
+}
+
 variable "backendrg-name" {
   type    = string
   default = "gmc-backend-rg"

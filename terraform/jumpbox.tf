@@ -4,7 +4,7 @@
 # gmc-jumpbox-win-vm
 
 resource "azurerm_resource_group" "jumpboxrg" {
-  name     = "gmc-jumpbox-rg"
+  name     = "${var.env}gmc-jumpbox-rg"
   location = var.location-name
 }
 
@@ -12,7 +12,7 @@ module "jumbox-compute" {
   source         = "../modules/compute"
   location       = azurerm_resource_group.jumpboxrg.location
   subnet-id      = module.frontend-vnet.vnet_subnets[1]
-  vm-name        = "gmc-jumpbox"
+  vm-name        = "${var.env}gmc-jumpbox"
   rg-name        = azurerm_resource_group.jumpboxrg.name
   admin-password = var.admin-password
 }

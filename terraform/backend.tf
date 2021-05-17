@@ -6,17 +6,17 @@
 # gmc-web-win-vm
 
 resource "azurerm_resource_group" "backendrg" {
-  name     = var.backendrg-name
+  name     = "${var.env}${var.backendrg-name}"
   location = var.location-name
 }
 
 module "web-vnet" {
   source              = "Azure/vnet/azurerm"
-  vnet_name           = "web-vnet"
+  vnet_name           = "${var.env}web-vnet"
   resource_group_name = azurerm_resource_group.backendrg.name
   address_space       = ["10.0.2.0/23"]
   subnet_prefixes     = ["10.0.2.0/24"]
-  subnet_names        = [var.websubnet-name]
+  subnet_names        = ["${var.env}${var.websubnet-name}"]
   tags                = {}
   depends_on          = [azurerm_resource_group.backendrg]
 }
@@ -31,7 +31,7 @@ module "web-compute" {
   source         = "../modules/compute"
   location       = azurerm_resource_group.backendrg.location
   subnet-id      = module.web-vnet.vnet_subnets[0]
-  vm-name        = "gmc-web"
+  vm-name        = "${var.env}gmc-web"
   rg-name        = azurerm_resource_group.backendrg.name
   admin-password = var.admin-password
 }
