@@ -1,7 +1,7 @@
 terraform {
   backend azurerm {
-      resource_group_name  = "Terra-rg"
-      storage_account_name = "remotesa01"
+      resource_group_name  = "gmc-storage-rg"
+      storage_account_name = "gmctfazsac"
       container_name       = "tfstate"
       key                  = "Lab93.tfstate"
   }

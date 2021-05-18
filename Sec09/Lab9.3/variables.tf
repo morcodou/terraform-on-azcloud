@@ -1,8 +1,8 @@
 variable abc {
   type    = string
-  default = "abc"
+  default = "my-abc-rg"
 }
 variable location {
   type    = string
-  default = "westeurope"
+  default = "canadacentral"
 }
