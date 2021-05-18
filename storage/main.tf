@@ -17,6 +17,19 @@ resource "azurerm_key_vault" "keyvault" {
   resource_group_name = azurerm_resource_group.resourcegroup.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Get", "Create", "Delete", "List", "Update"
+    ]
+
+    secret_permissions = [
+      "Get", "Delete", "List", "Set"
+    ]
+  }
 }
 
 resource "azurerm_storage_account" "storageaccount" {
