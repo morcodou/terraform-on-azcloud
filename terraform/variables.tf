@@ -1,5 +1,5 @@
 variable "env" {
-  default = "dev"
+  default = "d"
 }
 
 variable "backendrg-name" {
