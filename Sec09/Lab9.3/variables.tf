@@ -1,8 +1,8 @@
-variable abc {
+variable "abc" {
   type    = string
   default = "my-abc-rg"
 }
-variable location {
+variable "location" {
   type    = string
   default = "canadacentral"
 }
