@@ -34,8 +34,3 @@ variable "admin-username" {
   type    = string
   default = "morcodou"
 }
-variable "admin-password" {
-  type    = string
-  default = "P@$$w0rd1234!"
-  sensitive = true
-}

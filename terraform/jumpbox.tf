@@ -14,7 +14,7 @@ module "jumbox-compute" {
   subnet-id      = module.frontend-vnet.vnet_subnets[1]
   vm-name        = "${var.env}gmc-jumpbox"
   rg-name        = azurerm_resource_group.jumpboxrg.name
-  admin-password = var.admin-password
+  admin-password = data.azurerm_key_vault_secret.kvsecret.value
 }
 
 # module outputs

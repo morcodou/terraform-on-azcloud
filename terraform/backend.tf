@@ -33,7 +33,7 @@ module "web-compute" {
   subnet-id      = module.web-vnet.vnet_subnets[0]
   vm-name        = "${var.env}gmc-web"
   rg-name        = azurerm_resource_group.backendrg.name
-  admin-password = var.admin-password
+  admin-password = data.azurerm_key_vault_secret.kvsecret.value
 }
 # module outputs
 # module.web-compute.nic-id
